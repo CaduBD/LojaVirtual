@@ -38,9 +38,10 @@ public class ItemCarrinho {
     // para debug
     @Override
     public String toString() {
-        return "ItemCarrinho{" +
-                "produto=" + produto +
-                ", quantidade=" + quantidade +
-                '}';
+        // Isso vai aparecer no ListView do carrinho
+        return String.format("%s (Qtd: %d) - Subtotal: R$ %.2f",
+                produto.getNome(),
+                quantidade,
+                getSubtotal());
     }
 }
