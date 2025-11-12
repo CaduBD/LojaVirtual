@@ -15,12 +15,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             // Carrega a primeira tela (Login)
-            // O caminho /app/view/ indica para o JavaFX procurar na pasta 'view'
             Parent root = FXMLLoader.load(getClass().getResource("/app/view/LoginView.fxml"));
 
             Scene scene = new Scene(root);
 
-            primaryStage.setTitle("Loja Virtual");
+            // --- LINHA IMPORTANTE: CARREGA O CSS ---
+            String css = getClass().getResource("/app/view/styles.css").toExternalForm();
+            scene.getStylesheets().add(css);
+            // ---------------------------------------
+
+            primaryStage.setTitle("Loja Virtual POO (Sem DB)");
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
@@ -32,10 +36,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        // 1. Inicializa o banco de dados falso com dados
-        Repositorio.init();
-
-        // 2. Lança a aplicação JavaFX
+        Repositorio.init(); // Inicia banco falso
         launch(args);
     }
 }

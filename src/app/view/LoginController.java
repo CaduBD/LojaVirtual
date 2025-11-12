@@ -16,32 +16,28 @@ public class LoginController {
 
     @FXML private Button botaoEntrar;
 
-    /**
-     * Chamado quando o botão "Entrar na Loja" é clicado.
-     */
     @FXML
     protected void handleEntrar() {
-        // 1. Pega o cliente padrão do nosso repositório
         Cliente cliente = Repositorio.getClientePadrao();
 
         if (cliente != null) {
-            // 2. Guarda o cliente na sessão global
             SessaoManager.getInstance().setClienteLogado(cliente);
-
-            // 3. Navega para a tela de Catálogo
             mudarTela("CatalogoView.fxml");
         } else {
-            // Se isso acontecer, algo deu errado na inicialização do Repositorio
             System.err.println("Nenhum cliente padrão encontrado!");
         }
     }
 
-    // Método auxiliar para mudar de tela
     private void mudarTela(String fxml) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            Stage stage = (Stage) botaoEntrar.getScene().getWindow(); // Pega o Stage atual
-            stage.setScene(new Scene(root));
+            Stage stage = (Stage) botaoEntrar.getScene().getWindow();
+            Scene scene = new Scene(root);
+
+            // REAPLICA O CSS NA NOVA CENA
+            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }

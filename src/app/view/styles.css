@@ -1,0 +1,92 @@
+/* --- Configurações Gerais --- */
+.root {
+    -fx-font-family: 'Segoe UI', 'Helvetica', sans-serif;
+    -fx-background-color: #f4f6f8; /* Fundo cinza bem claro */
+    -fx-font-size: 14px;
+}
+
+/* --- Títulos --- */
+.titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* --- Botões --- */
+.button {
+    -fx-background-color: #3498db; /* Azul */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15 8 15;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9; /* Azul escuro */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.button:pressed {
+    -fx-background-color: #1f618d;
+}
+
+/* Botão Verde (Ação Principal) */
+.button-acao {
+    -fx-background-color: #27ae60;
+}
+.button-acao:hover {
+    -fx-background-color: #219150;
+}
+
+/* Botão Cinza (Secundário) */
+.button-secundario {
+    -fx-background-color: #95a5a6;
+}
+.button-secundario:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+/* --- Campos de Texto --- */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8;
+}
+
+.text-field:focused {
+    -fx-border-color: #3498db;
+}
+
+/* --- Tabela (TableView) --- */
+.table-view {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #ecf0f1;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+/* --- Card (Caixa Branca) --- */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-padding: 30;
+}
+
+/* --- Erro --- */
+.label-erro {
+    -fx-text-fill: #e74c3c;
+    -fx-font-weight: bold;
+}

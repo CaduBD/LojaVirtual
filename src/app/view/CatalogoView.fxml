@@ -8,29 +8,32 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="10.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.CatalogoController" prefHeight="480" prefWidth="640">
+<VBox spacing="15.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.CatalogoController" prefHeight="500" prefWidth="700">
     <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label fx:id="labelBoasVindas" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    <Label fx:id="labelBoasVindas" styleClass="titulo" />
 
     <TableView fx:id="tabelaProdutos" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="colunaNome" text="Produto" prefWidth="250" />
-            <TableColumn fx:id="colunaPreco" text="Preço" prefWidth="100" />
+            <TableColumn fx:id="colunaNome" text="Produto" prefWidth="300" />
+            <TableColumn fx:id="colunaPreco" text="Preço (R$)" prefWidth="120" />
             <TableColumn fx:id="colunaEstoque" text="Estoque" prefWidth="100" />
         </columns>
     </TableView>
 
-    <HBox alignment="CENTER_LEFT" spacing="10.0">
-        <Label text="Qtd:" />
-        <TextField fx:id="campoQuantidade" text="1" prefWidth="50" />
-        <Button text="Adicionar ao Carrinho" onAction="#handleAdicionar" />
+    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="card">
+        <Label text="Quantidade:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="campoQuantidade" text="1" prefWidth="60" alignment="CENTER" />
+
+        <Button text="Adicionar ao Carrinho" onAction="#handleAdicionar" styleClass="button" />
+
         <VBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT" spacing="5.0">
-            <Label fx:id="labelTotalCarrinho" style="-fx-font-weight: bold;" text="Total: R$ 0,00" />
-            <Button fx:id="botaoVerCarrinho" text="Ver Carrinho e Finalizar" onAction="#handleVerCarrinho" style="-fx-background-color: #28a745; -fx-text-fill: white;" />
+            <Label fx:id="labelTotalCarrinho" style="-fx-font-weight: bold; -fx-font-size: 16px;" text="Total: R$ 0,00" />
+            <Button fx:id="botaoVerCarrinho" text="🛒 Ver Carrinho e Finalizar" onAction="#handleVerCarrinho" styleClass="button, button-acao" />
         </VBox>
     </HBox>
-    <Label fx:id="labelErro" style="-fx-text-fill: red;" />
+
+    <Label fx:id="labelErro" styleClass="label-erro" />
 </VBox>
