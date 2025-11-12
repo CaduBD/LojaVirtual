@@ -38,42 +38,31 @@ public class CatalogoController {
     private Cliente clienteLogado;
     private Carrinho carrinho;
 
-    private ObservableList<Produto> listaProdutos;
-
     @FXML
     public void initialize() {
-        // 1. Pega os dados da Sessão
         clienteLogado = SessaoManager.getInstance().getClienteLogado();
         carrinho = SessaoManager.getInstance().getCarrinho();
 
-        if (clienteLogado == null) {
-            // Isso não deveria acontecer, mas é uma defesa
-            labelBoasVindas.setText("Erro: Cliente não logado.");
-            return;
-        }
+        if (clienteLogado == null) return;
 
-        labelBoasVindas.setText("Bem-vindo(a), " + clienteLogado.getNome() + "!");
+        labelBoasVindas.setText("Olá, " + clienteLogado.getNome() + "!");
 
-        // 2. Configura a Tabela (deve corresponder aos getters do Produto.java)
         colunaNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colunaPreco.setCellValueFactory(new PropertyValueFactory<>("preco"));
         colunaEstoque.setCellValueFactory(new PropertyValueFactory<>("quantidadeEstoque"));
 
-        // 3. Carrega os produtos do banco falso
         carregarProdutos();
-
-        // 4. Atualiza o total (caso o usuário volte do carrinho)
         atualizarTotalCarrinho();
     }
 
     private void carregarProdutos() {
-        listaProdutos = FXCollections.observableArrayList(Repositorio.listarProdutos());
-        tabelaProdutos.setItems(listaProdutos);
+        tabelaProdutos.setItems(FXCollections.observableArrayList(Repositorio.listarProdutos()));
     }
 
     @FXML
     protected void handleAdicionar() {
         Produto produtoSelecionado = tabelaProdutos.getSelectionModel().getSelectedItem();
+        labelErro.setText(""); // Limpa erro anterior
 
         if (produtoSelecionado == null) {
             labelErro.setText("Selecione um produto na tabela.");
@@ -92,27 +81,20 @@ public class CatalogoController {
             return;
         }
 
-        // Validação de estoque (verifica o estoque real, não o do carrinho)
         Optional<Produto> produtoRealOpt = Repositorio.listarProdutos().stream()
                 .filter(p -> p.getId() == produtoSelecionado.getId())
                 .findFirst();
 
-        int estoqueReal = 0;
-        if (produtoRealOpt.isPresent()) {
-            estoqueReal = produtoRealOpt.get().getQuantidadeEstoque();
-        }
+        int estoqueReal = produtoRealOpt.map(Produto::getQuantidadeEstoque).orElse(0);
 
         if (quantidade > estoqueReal) {
-            labelErro.setText("Estoque insuficiente. Máx: " + estoqueReal);
+            labelErro.setText("Estoque insuficiente. Restam apenas: " + estoqueReal);
             return;
         }
 
-        // Adiciona ao carrinho (Model)
         carrinho.adicionarProduto(produtoSelecionado, quantidade);
-
-        // Atualiza a View
         atualizarTotalCarrinho();
-        labelErro.setText(produtoSelecionado.getNome() + " adicionado!");
+        labelErro.setText(""); // Sucesso
     }
 
     private void atualizarTotalCarrinho() {
@@ -124,15 +106,17 @@ public class CatalogoController {
         mudarTela("CarrinhoView.fxml");
     }
 
-    // Método auxiliar para mudar de tela
     private void mudarTela(String fxml) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxml));
             Stage stage = (Stage) botaoVerCarrinho.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            // REAPLICA O CSS
+            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
-            labelErro.setText("Erro ao carregar o carrinho.");
+            labelErro.setText("Erro ao carregar tela.");
         }
     }
 }

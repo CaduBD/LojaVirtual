@@ -31,14 +31,10 @@ public class CarrinhoController {
 
     @FXML
     public void initialize() {
-        // Pega os dados da Sessão
         clienteLogado = SessaoManager.getInstance().getClienteLogado();
         carrinho = SessaoManager.getInstance().getCarrinho();
 
-        // Configura a ListView (ela vai usar o .toString() do ItemCarrinho)
         listaItensCarrinho.setItems(FXCollections.observableArrayList(carrinho.getItens()));
-
-        // Atualiza o total
         labelTotalFinal.setText(String.format("Total: R$ %.2f", carrinho.calcularTotal()));
     }
 
@@ -46,36 +42,36 @@ public class CarrinhoController {
     protected void handleFinalizar() {
         if (carrinho.getItens().isEmpty()) {
             labelStatus.setText("Carrinho está vazio!");
+            labelStatus.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        // 1. Criar o objeto Pedido (Model)
         Pedido novoPedido = new Pedido(clienteLogado, carrinho);
-
-        // 2. Salvar no "banco de dados falso" (Repositório)
         boolean sucesso = Repositorio.salvarPedido(novoPedido);
 
         if (sucesso) {
-            // 3. Limpar o carrinho da sessão
             SessaoManager.getInstance().novoCarrinho();
 
-            // 4. Atualizar a tela
-            listaItensCarrinho.setItems(null); // Limpa a lista visual
+            listaItensCarrinho.setItems(null);
             labelStatus.setText("Pedido #" + novoPedido.getId() + " finalizado com sucesso!");
+            labelStatus.setStyle("-fx-text-fill: #27ae60;"); // Verde
             labelTotalFinal.setText("Total: R$ 0,00");
-            botaoFinalizar.setDisable(true); // Desabilita o botão
+            botaoFinalizar.setDisable(true);
         } else {
             labelStatus.setText("Erro ao processar o pedido.");
+            labelStatus.setStyle("-fx-text-fill: red;");
         }
     }
 
     @FXML
     protected void handleVoltar() {
-        // Volta para o catálogo
         try {
             Parent root = FXMLLoader.load(getClass().getResource("CatalogoView.fxml"));
             Stage stage = (Stage) botaoFinalizar.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            // REAPLICA O CSS
+            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
