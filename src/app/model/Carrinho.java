@@ -42,6 +42,27 @@ public class Carrinho {
         }
     }
 
+    /**
+     Remove uma quantidade específica de um produto.
+     Se a quantidade a remover for maior ou igual à existente,
+     o item é removido da lista.
+     Senão, apenas subtrai a quantidade do item.
+     */
+    public void removerQuantidade(Produto produto, int quantidadeParaRemover) {
+        Optional<ItemCarrinho> itemExistente = buscarItemPorProduto(produto);
+
+        if (itemExistente.isPresent()) {
+            ItemCarrinho item = itemExistente.get();
+
+            // Se a remoção for total (ou maior que o total), remove o item
+            if (quantidadeParaRemover >= item.getQuantidade()) {
+                this.itens.remove(item);
+            } else {
+                // Se for parcial, apenas chama o método do ItemCarrinho
+                item.removerQuantidade(quantidadeParaRemover);
+            }
+        }
+    }
 
      //Calcula o valor total de todos os itens no carrinho.
     public double calcularTotal() {
@@ -51,7 +72,6 @@ public class Carrinho {
         }
         return total;
     }
-
 
         //Método auxiliar para encontrar um item pelo produto
      private Optional<ItemCarrinho> buscarItemPorProduto(Produto produto) {

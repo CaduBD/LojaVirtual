@@ -89,4 +89,11 @@
 .label-erro {
     -fx-text-fill: #e74c3c;
     -fx-font-weight: bold;
+
+/* Botão Vermelho (Perigo) */
+.button-danger {
+    -fx-background-color: #e74c3c;
+}
+.button-danger:hover {
+    -fx-background-color: #c0392b;
 }
