@@ -3,10 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?> <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="15.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.CarrinhoController" prefHeight="450" prefWidth="600">
+<VBox spacing="15.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.view.CarrinhoController" prefHeight="500" prefWidth="600">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -15,6 +15,13 @@
 
     <ListView fx:id="listaItensCarrinho" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;" />
 
+    <HBox alignment="CENTER_RIGHT" spacing="10.0">
+        <Label fx:id="labelErroRemover" styleClass="label-erro" /> <Label text="Qtd:" style="-fx-font-weight: bold;" />
+        <TextField fx:id="campoQtdRemover" prefWidth="50" text="1" alignment="CENTER" />
+
+        <Button fx:id="botaoRemover" onAction="#handleRemoverItem"
+                text="Remover Quantidade" styleClass="button, button-danger" />
+    </HBox>
     <VBox alignment="CENTER_RIGHT" styleClass="card">
         <Label fx:id="labelTotalFinal" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Total: R$ 0,00"/>
         <Label fx:id="labelStatus" style="-fx-font-size: 14px; -fx-text-fill: #27ae60; -fx-font-weight: bold;" />

@@ -35,6 +35,13 @@ public class ItemCarrinho {
             this.quantidade += qtd;
     }
 
+    //Remove uma quantidade do item
+    public void removerQuantidade(int qtd) {
+        if (qtd <= this.quantidade) {
+            this.quantidade -= qtd;
+        }
+    }
+
     // para debug
     @Override
     public String toString() {

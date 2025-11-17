@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField; // IMPORTAR TEXTFIELD
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +27,10 @@ public class CarrinhoController {
     @FXML private Label labelStatus;
     @FXML private Button botaoFinalizar;
 
+    @FXML private Button botaoRemover;
+    @FXML private Label labelErroRemover;
+    @FXML private TextField campoQtdRemover;
+
     private Cliente clienteLogado;
     private Carrinho carrinho;
 
@@ -33,13 +38,55 @@ public class CarrinhoController {
     public void initialize() {
         clienteLogado = SessaoManager.getInstance().getClienteLogado();
         carrinho = SessaoManager.getInstance().getCarrinho();
+        atualizarVisualCarrinho();
+    }
 
-        listaItensCarrinho.setItems(FXCollections.observableArrayList(carrinho.getItens()));
-        labelTotalFinal.setText(String.format("Total: R$ %.2f", carrinho.calcularTotal()));
+    /**
+     * MÉTODO ATUALIZADO: Agora lê a quantidade do TextField.
+     */
+    @FXML
+    protected void handleRemoverItem() {
+        labelErroRemover.setText(""); // Limpa erro anterior
+
+        // 1. Pega o item selecionado na lista
+        ItemCarrinho itemSelecionado = listaItensCarrinho.getSelectionModel().getSelectedItem();
+
+        if (itemSelecionado == null) {
+            labelErroRemover.setText("Selecione um item para remover!");
+            return;
+        }
+
+        // 2. Pega a quantidade a remover do TextField
+        int quantidadeParaRemover;
+        try {
+            quantidadeParaRemover = Integer.parseInt(campoQtdRemover.getText());
+            if (quantidadeParaRemover <= 0) {
+                labelErroRemover.setText("Qtd. deve ser positiva!");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            labelErroRemover.setText("Qtd. inválida!");
+            return;
+        }
+
+        // 3. Validação de lógica
+        if (quantidadeParaRemover > itemSelecionado.getQuantidade()) {
+            labelErroRemover.setText("Você só tem " + itemSelecionado.getQuantidade() + " desse item!");
+            return;
+        }
+
+        // 4. Chama o novo método do Model (Carrinho)
+        carrinho.removerQuantidade(itemSelecionado.getProduto(), quantidadeParaRemover);
+
+        // 5. Atualiza a tela (lista e total)
+        atualizarVisualCarrinho();
+        campoQtdRemover.setText("1"); // Reseta o campo
     }
 
     @FXML
     protected void handleFinalizar() {
+        labelErroRemover.setText("");
+
         if (carrinho.getItens().isEmpty()) {
             labelStatus.setText("Carrinho está vazio!");
             labelStatus.setStyle("-fx-text-fill: red;");
@@ -51,12 +98,11 @@ public class CarrinhoController {
 
         if (sucesso) {
             SessaoManager.getInstance().novoCarrinho();
-
-            listaItensCarrinho.setItems(null);
+            atualizarVisualCarrinho();
             labelStatus.setText("Pedido #" + novoPedido.getId() + " finalizado com sucesso!");
             labelStatus.setStyle("-fx-text-fill: #27ae60;"); // Verde
-            labelTotalFinal.setText("Total: R$ 0,00");
             botaoFinalizar.setDisable(true);
+            botaoRemover.setDisable(true);
         } else {
             labelStatus.setText("Erro ao processar o pedido.");
             labelStatus.setStyle("-fx-text-fill: red;");
@@ -69,11 +115,15 @@ public class CarrinhoController {
             Parent root = FXMLLoader.load(getClass().getResource("CatalogoView.fxml"));
             Stage stage = (Stage) botaoFinalizar.getScene().getWindow();
             Scene scene = new Scene(root);
-            // REAPLICA O CSS
             scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void atualizarVisualCarrinho() {
+        listaItensCarrinho.setItems(FXCollections.observableArrayList(carrinho.getItens()));
+        labelTotalFinal.setText(String.format("Total: R$ %.2f", carrinho.calcularTotal()));
     }
 }
