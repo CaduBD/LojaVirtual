@@ -19,7 +19,6 @@ public class Main extends Application {
 
             Scene scene = new Scene(root);
 
-            // --- LINHA IMPORTANTE: CARREGA O CSS ---
             String css = getClass().getResource("/app/view/styles.css").toExternalForm();
             scene.getStylesheets().add(css);
             // ---------------------------------------
@@ -36,7 +35,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        Repositorio.init(); // Inicia banco falso
+        Repositorio.init();
         launch(args);
     }
 }
