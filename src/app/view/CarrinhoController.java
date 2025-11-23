@@ -41,9 +41,6 @@ public class CarrinhoController {
         atualizarVisualCarrinho();
     }
 
-    /**
-     * MÉTODO ATUALIZADO: Agora lê a quantidade do TextField.
-     */
     @FXML
     protected void handleRemoverItem() {
         labelErroRemover.setText(""); // Limpa erro anterior
